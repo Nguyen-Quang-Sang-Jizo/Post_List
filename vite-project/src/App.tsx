@@ -1,13 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import React from "react";
+import Posts from "./Pages/Posts/Posts";
+import { Routes, Route } from "react-router-dom";
+import Post from "./Pages/Post/Post";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <div className="App">
-    </div>
-  )
-}
+    <>
+      <Routes>
+        <Route path="/" element={<Posts />} />
+        <Route path="/post/:id" element={<Post />} />
+      </Routes>
+    </>
+  );
+};
 
-export default App
+export default App;

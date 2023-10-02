@@ -1,0 +1,80 @@
+.posts {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url(https://img.freepik.com/free-vector/gradient-blur-pink-blue-abstract-background_53876-117324.jpg?w=900&t=st=1675188227~exp=1675188827~hmac=46e28bebc82abe965c3310ec23e2a551abbe1a63dc203e920773f30300c5855c)
+      no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .container {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0px 0px 29px 2px rgba(0, 0, 0, 0.31);
+    padding: 30px 20px;
+    max-width: 80%;
+    position: relative;
+    overflow: auto; 
+  }
+  
+  .posts .container {
+    text-align: center;
+  }
+  /* Posts.css */
+
+.posts {
+    padding: 20px;
+  }
+  
+  .container {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
