@@ -30,8 +30,8 @@
   .post input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc; /* Thêm đường viền cho input */
-    border-radius: 5px; /* Điều chỉnh độ cong của góc input */
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 18px;
     outline: none;
   }
