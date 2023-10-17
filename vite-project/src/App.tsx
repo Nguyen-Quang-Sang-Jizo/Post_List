@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useState }  from "react";
 import Posts from "./Pages/Posts/Posts";
 import { Routes, Route } from "react-router-dom";
 import Post from "./Pages/Post/Post";
+import UpdatePost from "./Pages/UpdatePost/UpdatePost";
+
+
+
 
 const App = () => {
-  return (
-    <>
+  const [posts, setPosts] = useState<string[]>([]);
+
+
+  return ( 
       <Routes>
-        <Route path="/" element={<Posts />} />
-        <Route path="/post/:id" element={<Post />} />
+        <Route path="/" element={<Posts
+        setPosts={setPosts}
+        posts={posts}
+        />} />
+        <Route path="/post/:id" element={<Post
+        setPosts={setPosts}
+        posts={posts}
+        />} />
+      <Route path="/updatepost/:id" element={<UpdatePost
+        setPosts={setPosts}
+        posts={posts}
+        />} />
       </Routes>
-    </>
   );
 };
 

@@ -3,69 +3,116 @@ import { useNavigate } from "react-router-dom";
 import config from "../../config.json";
 import axios from "axios";
 import "./Posts.css";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Button, CircularProgress } from "@mui/material";
 
-const Posts = () => {
+type IProps = {
+  setPosts: (arr: string[]) => void;
+  posts: string[];
+};
+
+const Posts: React.FC<IProps> = (props) => {
+  const { posts, setPosts } = props;
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-
-  const fetchPosts = async () => {
-    const res = await axios.get(config.apiUrl);
-    setPosts(res.data);
-  };
 
   useEffect(() => {
-    fetchPosts();
+    fetchApi();
   }, []);
 
+  const fetchApi = async () => {
+    try {
+      const response = await axios.get(config.apiUrl);
+      console.log('response', response);
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
   const handleDelete = async (post: any) => {
-    setPosts(posts.filter((p: any) => p.id !== post.id));
-    await axios.delete(`${config.apiUrl}/${post.id}`);
+    try {
+      const response = await axios.delete(`${config.apiUrl}/${post.id}`);
+      console.log('response', response);
+      if (response.status === 200) {
+        const update = posts.filter((p: any) => p.id !== post.id)
+        setPosts(update);
+      }
+    } catch (error) {
+      console.error("Error deleting post: ", error);
+    }
   };
 
   return (
-    <div className="posts">
-      <div className="container">
-        <button
-          onClick={() => navigate("/post/new")}
-          className="btn btn-primary mb-4"
-        >
-          New Post
-        </button>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Body</th>
-              <th>Update</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post: any) => (
-              <tr key={post.id}>
-                <td> {post.title} </td>
-                <td> {post.body} </td>
-                <td>
-                  <button
-                    onClick={() => navigate(`/post/${post.id}`)}
-                    className="btn btn-primary"
-                  >
-                    Update
-                  </button>
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(post)}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div style={{ padding: "150px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingBottom: "10px",
+        }}
+      >
+        <Button
+         variant="contained" 
+         color="success"
+         onClick={() => navigate(`/post/new}`)}
+         >
+          Create New
+        </Button>
       </div>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "500" }}>Title</TableCell>
+              <TableCell>Body</TableCell>
+              <TableCell>Update</TableCell>
+              <TableCell>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {posts.length > 0 ? (
+              posts.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.body}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => navigate(`/post/${item.id}`)}
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(item)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
