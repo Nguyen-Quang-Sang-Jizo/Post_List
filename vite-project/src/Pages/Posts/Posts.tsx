@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config.json";
 import axios from "axios";
-import "./Posts.css";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -86,7 +85,7 @@ const Posts: React.FC<IProps> = (props) => {
                       size="small"
                       variant="contained"
                       color="primary"
-                      onClick={() => navigate(`/post/${item.id}`)}
+                      onClick={() => navigate(`/updatepost/${item.id}`)}
                     >
                       Update
                     </Button>

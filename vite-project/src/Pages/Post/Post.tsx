@@ -1,7 +1,6 @@
 import config from "../../config.json";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import "./Post.css";
 import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

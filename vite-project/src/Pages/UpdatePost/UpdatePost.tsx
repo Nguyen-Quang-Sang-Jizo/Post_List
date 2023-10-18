@@ -1,7 +1,6 @@
 import config from "../../config.json";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import "./UpdatePost.css";
 import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -44,7 +43,6 @@ const UpdatePost: React.FC<IProps> = (props) =>  {
        const { id } = useParams();
 
     useEffect(() => {
-        if (id !== "new") {
           const fetchPost = async () => {
             try {
               const { data } = await axios.get<Postss>(`${config.apiUrl}/${id}`);
@@ -54,7 +52,6 @@ const UpdatePost: React.FC<IProps> = (props) =>  {
             }
           };
           fetchPost();
-        }
       }, [id]);
 
       const putRequest = async () => {
