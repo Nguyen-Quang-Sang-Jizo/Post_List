@@ -24,15 +24,31 @@ const Posts: React.FC<IProps> = (props) => {
     fetchApi();
   }, []);
 
-  const fetchApi = async () => {
-    try {
-      const response = await axios.get(config.apiUrl);
-      console.log('response', response);
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
+const fetchApi = async () =>{
+    const localStoragePosts = JSON.parse(localStorage.getItem("posts") || "[]");
+    setPosts(localStoragePosts);
+  };
+
+
+  const fetchApiOnce = async () => {
+    const hasFetched = localStorage.getItem('hasFetched');
+  
+    if (hasFetched !== 'true') {
+      try {
+        const response = await axios.get(config.apiUrl);
+        console.log('response', response);
+        setPosts(response.data);
+        localStorage.setItem("posts", JSON.stringify(response.data));
+        localStorage.setItem('hasFetched', 'true');
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
     }
   };
+  
+  fetchApiOnce();
+
+  
 
   const handleDelete = async (post: any) => {
     try {

@@ -35,17 +35,19 @@ const UpdatePost: React.FC<IProps> = (props) =>  {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const { posts, setPosts } = props;
+    const { id } = useParams();
     const [post, setPost] = useState<Postss>({
         userId: 1,
         title: "",
         body: "",
       });   
-       const { id } = useParams();
 
     useEffect(() => {
           const fetchPost = async () => {
             try {
-              const { data } = await axios.get<Postss>(`${config.apiUrl}/${id}`);
+              const getData = JSON.parse(localStorage.getItem("posts") || "[]");
+              const data = getData.find((post: any) => post.id == id);
+              console.log(data);
               setPost(data);
             } catch (error) {
               console.error("Lỗi khi fetch dữ liệu:", error);
@@ -53,23 +55,22 @@ const UpdatePost: React.FC<IProps> = (props) =>  {
           };
           fetchPost();
       }, [id]);
-
+      
       const putRequest = async () => {
         try {
-          const postRes = await axios.put(`${config.apiUrl}/${id}`, {title: title, body: body, userId:1});
-          if (postRes.data) {
-            const finIndex = posts.findIndex(
-              (item: any) => item.id === postRes.data.id
-            );
-            posts[finIndex] = postRes.data;
-            const updatedList = [...posts];
+            const postRes = {
+                userId: 1,
+                id: Number(id),
+                title: title || post.title, 
+                body: body || post.body,    
+            };
+            const updatedList = posts.map((item: any) => (item.id === postRes.id ? postRes : item));
             setPosts(updatedList);
-          }
+            localStorage.setItem("posts", JSON.stringify(updatedList));
         } catch (error) {
-            console.log(error);
+            console.error("Lỗi khi cập nhật bài viết:", error);
         }
-      }
-
+    }
       const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
@@ -88,7 +89,7 @@ return(
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <TextField
               name="title"
-              value={post.title}
+              value={title === "" ? post.title : title}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
               variant="standard"
               fullWidth
@@ -97,7 +98,7 @@ return(
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <TextField
               name="body"
-              value={post.body}
+              value={body === "" ? post.body : body}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
               variant="standard"
               multiline

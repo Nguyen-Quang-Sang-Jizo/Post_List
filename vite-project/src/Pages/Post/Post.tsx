@@ -1,13 +1,14 @@
 import config from "../../config.json";
-import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import {  useState, FormEvent } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 
 interface Postss {
+  id:number;
   userId: number;
   title: string;
   body: string;
@@ -34,22 +35,40 @@ const Post: React.FC<IProps> = (props) => {
   const navigate = useNavigate();
   const [titleValue, setTitleValue] = useState<string>("");
   const [bodyValue, setBodyValue] = useState<string>("");
-  const { id } = useParams();
 
+
+  const has = localStorage.getItem('has');
+  
+    if (has !== 'true') {
+      let nextId = 100
+      localStorage.setItem("nextId", nextId.toString());
+      }
+
+      localStorage.setItem('has', 'true');
 
   const postRequest = async () => {
     try {
+      let savedId = localStorage.getItem("nextId");
+      if(savedId){
+      let nextId = parseInt(savedId);
+      nextId = nextId + 1;
       const post = {
         title: titleValue,
         body: bodyValue,
         userId: 1
       } as Postss;
+      localStorage.setItem("nextId", nextId.toString());
+
       const postRes = await axios.post(config.apiUrl, post);
+      postRes.data.id = nextId;
       if (postRes.data) {
         posts.splice(0, 0, postRes.data);
         const updatedList = [...posts];
         setPosts(updatedList);
+        localStorage.setItem("posts", JSON.stringify(updatedList));
+
       }
+    }
     } catch (error) {
       console.log(error);
     }
@@ -60,9 +79,12 @@ const Post: React.FC<IProps> = (props) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
+    try {if (titleValue.trim() === '' || bodyValue.trim() === '') {
+      alert('Vui lòng nhập đầy đủ nội dung.');
+    } else {
         await postRequest();
         navigate('/')
+    }
     } catch (error) {
       console.error("Lỗi khi lưu bài viết:", error);
     }
@@ -80,6 +102,7 @@ const Post: React.FC<IProps> = (props) => {
               onChange={(e) => setTitleValue(e.target.value)}
               variant="standard"
               fullWidth
+              required
             />
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -90,6 +113,7 @@ const Post: React.FC<IProps> = (props) => {
               variant="standard"
               multiline
               fullWidth
+              required
               rows={4}
             />
           </Typography>
