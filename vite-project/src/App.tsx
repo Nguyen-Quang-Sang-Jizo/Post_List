@@ -3,12 +3,13 @@ import Posts from "./Pages/Posts/Posts";
 import { Routes, Route } from "react-router-dom";
 import Post from "./Pages/Post/Post";
 import UpdatePost from "./Pages/UpdatePost/UpdatePost";
+import { POST } from "./Pages/interfaces/interface";
 
 
 
 
 const App = () => {
-  const [posts, setPosts] = useState<string[]>([]);
+  const [posts, setPosts] = useState<POST[]>([]);
 
 
   return ( 
