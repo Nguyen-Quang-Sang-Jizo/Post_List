@@ -1,5 +1,5 @@
 export interface POST {
-    id: number;
+    id: number | string;
     userId: number;
     title: string;
     body: string;

@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import { POST } from "../interfaces/interface";
+import { v4 as uuidv4 } from 'uuid'
 
 const style = {
   position: "absolute",
@@ -30,22 +31,11 @@ const Post: React.FC<IProps> = (props) => {
   const [titleValue, setTitleValue] = useState("");
   const [bodyValue, setBodyValue] = useState("");
 
-  const has = localStorage.getItem('has');
-
-  if (has !== 'true') {
-    let nextId = 100
-    localStorage.setItem("nextId", nextId.toString());
-  }
-
-  localStorage.setItem('has', 'true');
- // Em lưu vào localStorage vì Nếu dùng length posts+1 thì khi xoá bớt data trong posts sẽ xảy ra trường hơp trùng id;
   const postRequest = async () => {
     try {
-      let savedId = localStorage.getItem("nextId");
-      if (savedId) {
-        let nextId = parseInt(savedId);
-        nextId = nextId + 1;
-        localStorage.setItem("nextId", nextId.toString());
+      const uuid = uuidv4();
+      const nextId = parseInt(uuid.replace(/-/g, ''), 16) % 1000000 + 101;
+      if (nextId) {
         const post = {
           title: titleValue,
           body: bodyValue,

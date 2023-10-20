@@ -38,9 +38,11 @@ const UpdatePost: React.FC<IProps> = (props) => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const data = posts.find((post: POST) => post.id === Number(id)) as POST;
+        const data = posts.find((post: POST) => post.id === Number(id));
         console.log(data);
-        setPost(data);
+        if (data !== undefined) {
+          setPost(data);
+        }
       } catch (error) {
         console.error("Lỗi khi fetch dữ liệu:", error);
       }
